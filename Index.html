@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pour Martha 💖</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd);
+      background-size: 600% 600%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
+    }
+
+    h1 {
+      font-size: 80px;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(255,255,255,0.7);
+      animation: pulse 2s infinite;
+      z-index: 10;
+      text-align: center;
+    }
+
+    p {
+      font-size: 24px;
+      color: #fff;
+      margin-top: -10px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.5);
+      z-index: 10;
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1) rotate(-2deg); }
+    }
+
+    .heart, .confetti {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      transform: rotate(45deg);
+      z-index: 5;
+    }
+
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(45deg); opacity:1; }
+      100% { transform: translateY(-100vh) rotate(45deg); opacity:0; }
+    }
+
+    .play-btn {
+      position: fixed;
+      top: 20px; left: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background: #fff;
+      color: #ff4d6d;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+  <h1>JE T’AIME</h1>
+  <p>Mon cœur ne bat que pour toi, Martha 💞</p>
+
+  <button class="play-btn" id="playBtn">🎵 Écouter la musique</button>
+  <audio id="audio" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/02/15/audio_7b1b3856e5.mp3?filename=romantic-piano-110271.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const btn = document.getElementById('playBtn');
+    btn.addEventListener('click', () => {
+      audio.play();
+      btn.style.display = 'none';
+    });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.width = 10 + Math.random() * 20 + 'px';
+      heart.style.height = heart.style.width;
+      heart.style.animationDuration = 3 + Math.random() * 3 + 's';
+      heart.style.background = 'transparent';
+      heart.style.opacity = Math.random() + 0.5;
+      document.body.appendChild(heart);
+      heart.style.animation = `floatUp ${3 + Math.random() * 3}s linear forwards`;
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(createHeart, 250);
+
+    // Confettis au clic
+    function createConfetti(e) {
+      for (let i = 0; i < 20; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.width = confetti.style.height = 5 + Math.random()*10 + 'px';
+        confetti.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+        confetti.style.left = e.clientX + 'px';
+        confetti.style.top = e.clientY + 'px';
+        confetti.style.opacity = 1;
+        confetti.style.position = 'absolute';
+        document.body.appendChild(confetti);
+
+        let angle = Math.random()*2*Math.PI;
+        let radius = 50 + Math.random()*50;
+        let dx = Math.cos(angle) * radius;
+        let dy = Math.sin(angle) * radius;
+
+        confetti.animate([
+          { transform: `translate(0,0)`, opacity:1 },
+          { transform: `translate(${dx}px, ${dy}px)`, opacity:0 }
+        ], { duration: 1000 + Math.random()*1000, easing: 'ease-out' });
+
+        setTimeout(() => confetti.remove(), 1500);
+      }
+    }
+
+    document.body.addEventListener('click', createConfetti);
+  </script>
+</body>
+</html>
